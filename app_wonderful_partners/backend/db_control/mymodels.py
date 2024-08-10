@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey, Integer, String, Date, Text, Column
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 class Base(DeclarativeBase):
     pass
@@ -49,6 +50,28 @@ class Invitation(Base):
     status: Mapped[str] = mapped_column(String(20), default='pending')
     inviter = relationship('User', back_populates='invitations')
     family = relationship('Family', back_populates='invitations')
+
+class CareTask(Base):
+    __tablename__ = 'caretask_table'
+
+    caretask_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)  # 外部キー
+    date = Column(Date, nullable=False)
+    task_name = Column(String(100), nullable=False)
+    status = Column(String(20), default='pending')  # デフォルトは未完了
+    created_at = Column(DateTime, default=datetime.utcnow)  # 自動生成される作成日時
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 自動更新される更新日時
+
+    def __init__(self, user_id, date, task_name):
+        self.user_id = user_id
+        self.date = date
+        self.task_name = task_name
+
+
+
+
+
+
 
 User.user_families = relationship('UserFamily', back_populates='user')
 Family.user_families = relationship('UserFamily', back_populates='family')
