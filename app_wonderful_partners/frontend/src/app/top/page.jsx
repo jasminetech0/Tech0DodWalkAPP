@@ -2,16 +2,26 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Header from '../components/Header';
+import MainContent from '../components/MainContent'
+import Footer from '../components/Footer';
 
-const Top = () => {
+
+const HomePage = () => {
   return (
     <div>
-      <h1>トップページ</h1>
-      <Link href="/walk_record">
-        <button>散歩</button>
-      </Link>
+      <Header />
+      <MainContent />
+      <Footer />
+      {/* 他のコンテンツやコンポーネントをここに追加できます */}
     </div>
   );
 };
 
-export default Top;
+export default HomePage;
+
+
+
+
+
+

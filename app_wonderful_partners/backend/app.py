@@ -5,7 +5,6 @@ from flask_cors import CORS
 from PIL import Image, ImageOps
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
-from mymodels import CareTask, db
 from datetime import datetime, timedelta
 import os
 import json

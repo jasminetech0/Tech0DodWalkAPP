@@ -2,7 +2,10 @@ from sqlalchemy import ForeignKey, Integer, String, Date, Text, Column
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, DateTime
 from datetime import datetime
+
+db = SQLAlchemy()
 
 class Base(DeclarativeBase):
     pass

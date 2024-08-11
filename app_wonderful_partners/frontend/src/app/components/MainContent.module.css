@@ -1,0 +1,66 @@
+/* MainContent.module.css */
+
+/* 全体のメインコンテンツ */
+.mainContent {
+    padding: 20px;
+  }
+  
+  /* 上部の大きな写真 */
+  .dogImage {
+    width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px; /* 写真を中央に配置し、下に余白を追加 */
+  }
+  
+  /* 横並びのレイアウト */
+  .horizontalLayout {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 要素を中央に配置 */
+    gap: 20px; /* 要素間のスペースを調整 */
+  }
+  
+  /* 左側の丸いプロフィール写真 */
+  .profilePicContainer {
+    margin-right: 10px;
+  }
+  
+  .profilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .timeStamp {
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  /* 真ん中のメッセージボックス */
+  .messageBox {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: white;
+    max-width: 200px;
+    word-wrap: break-word;
+    position: relative;
+    flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
+  }
+  
+  /* 右側の返信リンク */
+  .replyLink {
+    margin-left: 10px;
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .replyLink a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  

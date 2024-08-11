@@ -1,0 +1,34 @@
+/* Footer.module.css */
+.footer-buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #f8f8f8;
+  }
+  
+  .footer-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .footer-button:hover {
+    background-color: #0056b3;
+  }
+ 
+  .footer-buttons {
+    display: flex;
+    justify-content: center; /* ボタンを中央に揃える */
+    gap: 20px; /* ボタン間のスペースを調整 */
+    padding: 10px;
+    background-color: #f8f8f8;
+  }
+  

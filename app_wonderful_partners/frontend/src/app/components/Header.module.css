@@ -1,0 +1,14 @@
+/* Header.module.css */
+
+/* Header全体のスタイル */
+.header {
+    padding: 20px; /* 上下左右に余白を追加 */
+    text-align: center; /* 中央揃え */
+    background-color: #f8f8f8; /* 背景色を設定（任意） */
+  }
+  
+  /* テキストのスタイル */
+  .headerText {
+    margin-bottom: 20px; /* 下に余白を追加して他の要素と距離を取る */
+  }
+  
