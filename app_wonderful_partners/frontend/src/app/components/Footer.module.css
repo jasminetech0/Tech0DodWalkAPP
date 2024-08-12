@@ -7,6 +7,8 @@
   }
   
   .footer-button {
+    font-family: 'Roboto', sans-serif; /* Robotoフォントを適用 */
+    font-size: 1rem; /* フォントサイズを設定 */
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -18,6 +20,10 @@
     justify-content: center;
     font-size: 12px;
     cursor: pointer;
+    text-align: center; /* テキストを中央に揃える */
+    white-space: normal; /* テキストを折り返す */
+    word-break: break-word; /* 単語を途中で改行 */
+    font-weight: bold; /* 太文字にする */
   }
   
   .footer-button:hover {

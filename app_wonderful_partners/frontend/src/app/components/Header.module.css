@@ -7,7 +7,7 @@
   align-items: center; /* 子要素を垂直方向に中央揃え */
   padding: 1%; /* 上下左右に余白を追加 */
   background-color: #f8f8f8; /* 背景色を設定（任意） */
-  font: 1000 1.0rem/1rem Roboto Flex; /* Figmaより */
+  font: 700 0.8rem/1rem Roboto Flex; /* Figmaより */
   text-align: center; /* 文字を中央揃え */
   line-height: 1.15; /* 全体の行間を広げる */
 }
@@ -23,12 +23,12 @@
 
 /* 1行目のテキストスタイル */
 .firstLine {
-  font-size: 1.25rem; /* 文字サイズを大きく */
+  font-size: 1.0rem; /* 文字サイズを大きく */
 }
 
 /* 2行目のスタイル（1行目と2行目の間を広げる） */
 .secondLine {
-  font-size: 1.25rem; /* 文字サイズを大きく */
+  font-size: 1.05rem; /* 文字サイズを大きく */
   margin-top: 1rem; /* 1行目と2行目の間に余白を追加 */
 }
 
