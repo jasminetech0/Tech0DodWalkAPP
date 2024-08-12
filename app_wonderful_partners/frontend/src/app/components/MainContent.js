@@ -28,7 +28,9 @@ const MainContent = () => {
         </div>
 
         <div className={styles.replyLink}>
-          <a href="#">返信</a>
+            <Link href="/chat">
+                 返信
+            </Link>  {/* Linkコンポーネントでページ遷移を実装 */}   
         </div>
       </div>
     </main>
