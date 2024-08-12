@@ -8,13 +8,13 @@ const MainContent = () => {
   return (
     <main className={styles.mainContent}>
       {/* 上部の大きな写真 */}
-      <img src="/dog-image.png" alt="犬の写真" className={styles.dogImage} />
+      <img src="/matthew-image.png" alt="犬の写真" className={styles.dogImage} />
 
       {/* 横並びの要素（左: 丸い写真, 中央: メッセージボックス, 右: 返信リンク） */}
       <div className={styles.horizontalLayout}>
         <div className={styles.profilePicContainer}>
           <img
-            src="/dog-profile.png"
+            src="/matthew-profile.png"
             alt="犬のプロフィール"
             className={styles.profilePic}
           />
@@ -22,14 +22,18 @@ const MainContent = () => {
         </div>
 
         <div className={styles.messageBox}>
-          <div>けんちゃんへ</div>
-          <div>夕方のお散歩楽しみだよ！</div>
-          <div style={{ textAlign: 'right', marginTop: '10px' }}>マシューより</div>
+          <div style={{ marginBottom: '5px' }}>けんちゃんへ</div>
+          <div>夕方のお散歩が楽しみだよ！</div>
+          <div style={{ textAlign: 'right', marginTop: '5px' }}>マシューより</div>
         </div>
 
         <div className={styles.replyLink}>
             <Link href="/chat">
-                 返信
+              <img
+                src="/mail-button.png"
+                alt="返信"
+                className={styles.replyIcon}
+              />
             </Link>  {/* Linkコンポーネントでページ遷移を実装 */}   
         </div>
       </div>

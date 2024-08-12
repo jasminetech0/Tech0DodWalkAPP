@@ -7,7 +7,7 @@
   
   /* 上部の大きな写真 */
   .dogImage {
-    width: 300px;
+    width: auto;
     height: auto;
     display: block;
     margin: 0 auto 20px; /* 写真を中央に配置し、下に余白を追加 */
@@ -18,31 +18,32 @@
     display: flex;
     align-items: center;
     justify-content: center; /* 要素を中央に配置 */
-    gap: 20px; /* 要素間のスペースを調整 */
+    gap: 10px; /* 要素間のスペースを調整 */
   }
   
   /* 左側の丸いプロフィール写真 */
   .profilePicContainer {
-    margin-right: 10px;
+    margin-right: 1px;
   }
   
   .profilePic {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
+    image-rendering: crisp-edges; /* 画像のシャープさを保つ */
   }
-  
+  /* メール受信時刻の表示 */
   .timeStamp {
     font-size: 12px;
-    color: #ffffff;
+    color: #fdf9f9; /* 今回はホワイトアウト */
     text-align: center;
-    margin-top: 5px;
+    margin-top: 2px;
   }
   
   /* 真ん中のメッセージボックス */
   .messageBox {
-    border: 2px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.521);
     border-radius: 10px;
     padding: 10px;
     background-color: white;
@@ -50,8 +51,17 @@
     word-wrap: break-word;
     position: relative;
     flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
+    font: 600 0.75rem/1rem Roboto Flex; /* Figmaより */
   }
   
+  /* 返信ボタン */
+  .replyIcon {
+    width:25Px; /* 画像の幅を小さく設定 */
+    height:25px; /* 画像の高さを小さく設定 */
+    object-fit: cover; /* 画像を枠内に収める */
+    cursor: pointer; /* マウスオーバー時にポインターを表示 */
+  }
+
   /* 右側の返信リンク */
   .replyLink {
     margin-left: 10px;
