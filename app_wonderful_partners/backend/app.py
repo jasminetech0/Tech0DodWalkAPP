@@ -30,7 +30,9 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # トークン�
 jwt = JWTManager(app)
 
 # DB設定
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///WP.db'
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'db_control/WP.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -56,8 +58,7 @@ class Pet(db.Model):
     image = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=True)  # family_id カラムを追加
-    avatar_path = db.Column(db.String(120), nullable=True)
-
+    
 # 家族モデル
 class Family(db.Model):
     id = db.Column(db.Integer, primary_key=True)
