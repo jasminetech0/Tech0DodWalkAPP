@@ -17,9 +17,9 @@ app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
 # ★みぞっち：新しく追加するホームエンドポイント
-@app.route('/')
-def home():
-    return "Welcome to the Home Page!"
+#@app.route('/')
+#def home():
+#    return "Welcome to the Home Page!"
 
 # JWTシークレットキー
 app.config['SECRET_KEY'] = os.urandom(24)

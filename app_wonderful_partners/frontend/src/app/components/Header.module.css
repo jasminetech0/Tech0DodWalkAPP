@@ -2,13 +2,55 @@
 
 /* Header全体のスタイル */
 .header {
-    padding: 20px; /* 上下左右に余白を追加 */
-    text-align: center; /* 中央揃え */
-    background-color: #f8f8f8; /* 背景色を設定（任意） */
-  }
-  
-  /* テキストのスタイル */
-  .headerText {
-    margin-bottom: 20px; /* 下に余白を追加して他の要素と距離を取る */
-  }
-  
+  display: flex; /* Flexboxを使用して子要素を横に並べる */
+  justify-content: center; /* 子要素を中央揃え */
+  align-items: center; /* 子要素を垂直方向に中央揃え */
+  padding: 1%; /* 上下左右に余白を追加 */
+  background-color: #f8f8f8; /* 背景色を設定（任意） */
+  font: 1000 1.0rem/1rem Roboto Flex; /* Figmaより */
+  text-align: center; /* 文字を中央揃え */
+  line-height: 1.15; /* 全体の行間を広げる */
+}
+
+/* テキストのスタイル */
+.headerText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5em; /* 下に余白を追加して他の要素と距離を取る */
+}
+
+/* 1行目のテキストスタイル */
+.firstLine {
+  font-size: 1.25rem; /* 文字サイズを大きく */
+}
+
+/* 2行目のスタイル（1行目と2行目の間を広げる） */
+.secondLine {
+  font-size: 1.25rem; /* 文字サイズを大きく */
+  margin-top: 1rem; /* 1行目と2行目の間に余白を追加 */
+}
+
+/* 3行目のスタイル（2行目と3行目の間を広げる） */
+.thirdLine {
+  margin-top: 0.75rem; /* 2行目と3行目の間に余白を追加 */
+}
+
+/* 左側の天気マークのスタイル */
+.weatherIcon {
+  width: 50px; /* 写真の幅を指定 */
+  height: auto; /* 写真の高さを自動調整 */
+  margin-right: 1px; /* テキストとの間に余白を追加 */
+}
+
+/* 右側の写真のスタイル */
+.headerImage {
+  width: 50px; /* 写真の幅を指定 */
+  height: auto; /* 写真の高さを自動調整 */
+  margin-left: 1px; /* テキストとの間に余白を追加 */
+  object-fit: cover; /* 画像をコンテナに収める */
+  border-radius: 50%; /* 画像を円形にする */
+}
+
+
