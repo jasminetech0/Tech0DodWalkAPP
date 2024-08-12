@@ -6,6 +6,7 @@ from PIL import Image, ImageOps
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import os
 import json
 import base64
@@ -14,7 +15,15 @@ import requests
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
+ # CORSを有効にする
+
+# 相対パスを絶対パスに変換
+load_dotenv(dotenv_path='C:/Users/jiebing/Desktop/DogWalk/app_wonderful_partners/backend/.env')
+
+api_key = os.getenv("OPENAI_API_KEY").strip()
+print(f"API Key: {api_key}")
+
 
 # ★みぞっち：新しく追加するホームエンドポイント
 #@app.route('/')
@@ -99,7 +108,6 @@ class PetRecord(db.Model):
     weight_memo = db.Column(db.Text, nullable=True)
     other_memo = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
     pet = db.relationship('Pet', backref='records', lazy=True)
     user = db.relationship('User', backref='records', lazy=True)
 
@@ -348,6 +356,37 @@ def create_caretask():
     return jsonify({"message": "CareTask registered successfully!"}), 200
 
 
+@app.route('/api/chats', methods=['POST'])
+def chat():
+    message = request.get_json()  # クライアントからのJSONデータを取得
+    
+    
+
+    # ChatGPT APIにメッセージを送信して応答を取得
+    response = openai.ChatCompletion.create( 
+        model="gpt-3.5-turbo-0125",  # 安価なモデルを指定
+        messages=[
+            {"role": "system", "content": "あなたは犬のマシューです。"},
+            {"role": "user", "content": message}
+        ],
+        max_tokens=50
+    )
+
+    reply = response['choices'][0]['message']['content'].strip()
+
+    # 返答の文字数を制限（例: 100文字）
+    max_length = 100
+    if len(reply) > max_length:
+        reply = reply[:max_length] + "..."  # 切り詰めて末尾に "..." を追加
+
+    return jsonify({'reply': reply})
+
+  
+
+
+@app.route('/')
+def sample():
+    return "dog"
 
 
     

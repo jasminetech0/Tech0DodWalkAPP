@@ -1,0 +1,26 @@
+# Python関連
+__pycache__/
+*.pyc
+*.pyo
+
+# Node.js関連
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 環境変数ファイル
+.env
+
+# その他の機密情報
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# IDE関連（例: VSCode, PyCharm）
+.vscode/
+.idea/
+
+# OSに依存するファイル
+.DS_Store
+Thumbs.db
