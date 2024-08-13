@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
 from PIL import Image, ImageOps
@@ -7,6 +8,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from db_control.mymodels import db, User, Pet, Family, Invitation, UserFamily, PetRecord, CareTask
 import os
 import json
 import base64
@@ -15,105 +17,35 @@ import requests
 
 
 app = Flask(__name__)
-CORS(app)
- # CORSを有効にする
 
-# 相対パスを絶対パスに変換
-load_dotenv(dotenv_path='C:/Users/jiebing/Desktop/DogWalk/app_wonderful_partners/backend/.env')
+
+CORS(app) # CORSを有効にする
+
+# 現在のスクリプトのディレクトリから .env ファイルへの相対パスを指定
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
+# .env ファイルをロード
+load_dotenv(dotenv_path=dotenv_path)
 
 api_key = os.getenv("OPENAI_API_KEY").strip()
 print(f"API Key: {api_key}")
 
 
-# ★みぞっち：新しく追加するホームエンドポイント
-#@app.route('/')
-#def home():
-#    return "Welcome to the Home Page!"
 
 # JWTシークレットキー
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///WP.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
 app.config['JWT_TOKEN_LOCATION'] = ['headers']  # トークンの場所をヘッダーに設定
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # トークンの有効期限を設定
 
+# データベースをアプリケーションに紐付ける
+db.init_app(app)
+migrate = Migrate(app, db)
+
 jwt = JWTManager(app)
-
-# DB設定
-basedir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(basedir, 'db_control/WP.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-app.config['UPLOAD_FOLDER'] = 'uploads'
-
-# ユーザーモデル
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    image = db.Column(db.Text)
-    families = db.relationship('UserFamily', backref='user', lazy=True)
-    pets = db.relationship('Pet', backref='owner', lazy=True)
-
-# ペットモデル
-class Pet(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    breed = db.Column(db.String(50))
-    gender = db.Column(db.String(10))
-    birthdate = db.Column(db.Date)
-    image = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=True)  # family_id カラムを追加
-    
-# 家族モデル
-class Family(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    users = db.relationship('UserFamily', backref='family', lazy=True)
-    pets = db.relationship('Pet', backref='family', lazy=True)
-
-# ユーザーと家族の中間テーブル
-class UserFamily(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
-
-# 招待モデル
-class Invitation(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    inviter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    invitee_email = db.Column(db.String(100), nullable=False)
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='pending')
-
-    inviter = db.relationship('User', backref='invitations', lazy=True)
-    family = db.relationship('Family', backref='invitations', lazy=True)
-
-# ペットレコード
-class PetRecord(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    food_amount = db.Column(db.String(50), nullable=True)
-    food_memo = db.Column(db.Text, nullable=True)
-    poop_amount = db.Column(db.String(50), nullable=True)
-    poop_consistency = db.Column(db.String(50), nullable=True)
-    poop_memo = db.Column(db.Text, nullable=True)
-    pee_amount = db.Column(db.String(50), nullable=True)
-    pee_memo = db.Column(db.Text, nullable=True)
-    weight = db.Column(db.Float, nullable=True)
-    weight_memo = db.Column(db.Text, nullable=True)
-    other_memo = db.Column(db.Text, nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    pet = db.relationship('Pet', backref='records', lazy=True)
-    user = db.relationship('User', backref='records', lazy=True)
-
-
-with app.app_context():
-    db.create_all()
 
 # JWTトークンの生成
 def create_jwt_token(user_id):

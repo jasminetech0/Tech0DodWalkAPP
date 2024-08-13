@@ -1,69 +1,107 @@
-from sqlalchemy import ForeignKey, Integer, String, Date, Text, Column
+from sqlalchemy import ForeignKey, Integer, String, Date, create_engine, Text, Column
+from datetime import datetime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, DateTime
-from datetime import datetime
 
-db = SQLAlchemy()
 
-class Base(DeclarativeBase):
-    pass
+app = Flask(__name__)
+# データベースの設定
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///WP.db'  # SQLite データベースファイルのパス
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 変更追跡を無効化（推奨設定）
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
-class User(Base):
+# SQLAlchemy の初期化
+db = SQLAlchemy(app)
+
+
+# ユーザーモデル
+class User(db.Model):
     __tablename__ = 'user'
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(String(50), nullable=False)
-    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(255), nullable=False)
-    image: Mapped[str] = mapped_column(Text)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    image = db.Column(db.Text)
+    families = db.relationship('UserFamily', backref='user', lazy=True)
+    pets = db.relationship('Pet', backref='owner', lazy=True)
 
-class Family(Base):
+
+# 家族モデル
+class Family(db.Model):
     __tablename__ = 'family'
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    users = db.relationship('UserFamily', backref='family', lazy=True)
+    pets = db.relationship('Pet', backref='family', lazy=True)
 
-class UserFamily(Base):
+
+# ユーザーと家族の中間テーブル
+class UserFamily(db.Model):
     __tablename__ = 'user_family'
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), nullable=False)
-    family_id: Mapped[int] = mapped_column(Integer, ForeignKey('family.id'), nullable=False)
-    user = relationship('User', back_populates='user_families')
-    family = relationship('Family', back_populates='user_families')
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
 
-class Pet(Base):
+
+
+# ペットモデル
+class Pet(db.Model):
     __tablename__ = 'pet'
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False)
-    breed: Mapped[str] = mapped_column(String(50))
-    gender: Mapped[str] = mapped_column(String(10))
-    birthdate: Mapped[Date] = mapped_column(Date)
-    image: Mapped[str] = mapped_column(Text)
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), nullable=False)
-    family_id: Mapped[int] = mapped_column(Integer, ForeignKey('family.id'), nullable=True)
-    user = relationship('User', back_populates='pets')
-    family = relationship('Family', back_populates='pets')
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    breed = db.Column(db.String(50))
+    gender = db.Column(db.String(10))
+    birthdate = db.Column(db.Date)
+    image = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=True)  # family_id カラムを追加
 
-class Invitation(Base):
+
+
+# 招待モデル
+class Invitation(db.Model):
     __tablename__ = 'invitation'
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    inviter_id: Mapped[int] = mapped_column(Integer, ForeignKey('user.id'), nullable=False)
-    invitee_email: Mapped[str] = mapped_column(String(100), nullable=False)
-    family_id: Mapped[int] = mapped_column(Integer, ForeignKey('family.id'), nullable=False)
-    status: Mapped[str] = mapped_column(String(20), default='pending')
-    inviter = relationship('User', back_populates='invitations')
-    family = relationship('Family', back_populates='invitations')
+    id = db.Column(db.Integer, primary_key=True)
+    inviter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    invitee_email = db.Column(db.String(100), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='pending')
+    inviter = db.relationship('User', backref='invitations', lazy=True)
+    family = db.relationship('Family', backref='invitations', lazy=True)
 
-class CareTask(Base):
+
+# ペットレコード
+class PetRecord(db.Model):
+    __tablename__ = 'petrecord'
+    id = db.Column(db.Integer, primary_key=True)
+    pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    food_amount = db.Column(db.String(50), nullable=True)
+    food_memo = db.Column(db.Text, nullable=True)
+    poop_amount = db.Column(db.String(50), nullable=True)
+    poop_consistency = db.Column(db.String(50), nullable=True)
+    poop_memo = db.Column(db.Text, nullable=True)
+    pee_amount = db.Column(db.String(50), nullable=True)
+    pee_memo = db.Column(db.Text, nullable=True)
+    weight = db.Column(db.Float, nullable=True)
+    weight_memo = db.Column(db.Text, nullable=True)
+    other_memo = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    pet = db.relationship('Pet', backref='records', lazy=True)
+    user = db.relationship('User', backref='records', lazy=True)
+
+
+class CareTask(db.Model):
     __tablename__ = 'caretask_table'
 
-    caretask_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)  # 外部キー
-    date = Column(Date, nullable=False)
-    task_name = Column(String(100), nullable=False)
-    status = Column(String(20), default='pending')  # デフォルトは未完了
-    created_at = Column(DateTime, default=datetime.utcnow)  # 自動生成される作成日時
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 自動更新される更新日時
+    caretask_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外部キー
+    date = db.Column(db.Date, nullable=False)
+    task_name = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.String(20), default='pending')  # デフォルトは未完了
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 自動生成される作成日時
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 自動更新される更新日時
 
     def __init__(self, user_id, date, task_name):
         self.user_id = user_id
@@ -73,12 +111,12 @@ class CareTask(Base):
 
 
 
+# テーブルを作成するための関数
+def create_tables():
+    with app.app_context():
+        db.create_all()  # テーブルを作成
 
-
-
-User.user_families = relationship('UserFamily', back_populates='user')
-Family.user_families = relationship('UserFamily', back_populates='family')
-Family.pets = relationship('Pet', back_populates='family')
-User.invitations = relationship('Invitation', back_populates='inviter')
-Family.invitations = relationship('Invitation', back_populates='family')
-User.pets = relationship('Pet', back_populates='user')
+# メインブロック
+if __name__ == "__main__":
+    create_tables()  # アプリケーション起動前にテーブルを作成
+    app.run(debug=True)
