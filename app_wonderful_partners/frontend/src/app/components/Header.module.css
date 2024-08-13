@@ -6,7 +6,7 @@
   justify-content: center; /* 子要素を中央揃え */
   align-items: center; /* 子要素を垂直方向に中央揃え */
   padding: 1%; /* 上下左右に余白を追加 */
-  background-color: #f8f8f8; /* 背景色を設定（任意） */
+  background-color: #65c5cc; /* 背景色を設定（任意） */
   font: 700 0.8rem/1rem Roboto Flex; /* Figmaより */
   text-align: center; /* 文字を中央揃え */
   line-height: 1.15; /* 全体の行間を広げる */
