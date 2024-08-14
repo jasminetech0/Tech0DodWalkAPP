@@ -35,7 +35,7 @@ const getWeatherInfo = (weather) => {
 // 現在の日付を取得してフォーマットする関数
 const formatDate = () => {
   const date = new Date();
-  const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+  const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long',hour: '2-digit', minute: '2-digit' };// 現在時刻hh:mmを追加
   return date.toLocaleDateString('ja-JP', options);
 }
 
@@ -128,7 +128,7 @@ const Header = () => {
           <div className={styles.headerText}>
             <div className={styles.firstLine}>{currentDate}</div> {/* 現在の日付を表示 */}
             <div className={styles.thirdLine}> 🌡気温🌡 {weather.temp}℃</div> {/* 2行目 */}
-            <div>体感温度 {weather.feels_like} ℃</div> {/* 体感温度 */}
+            <div>体感温度 {weather.feels_like}℃</div> {/* 体感温度 */}
             <div>湿度 {weather.humidity}%</div> {/* 湿度情報 */}
             <div>軽い風 {weather.wind}m/s</div> {/* 風の情報 */}
           </div>
