@@ -73,7 +73,7 @@ class Invitation(db.Model):
 
 # ペットレコード
 class PetRecord(db.Model):
-    __tablename__ = 'petrecord'
+    __tablename__ = 'pet_record'
     id = db.Column(db.Integer, primary_key=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

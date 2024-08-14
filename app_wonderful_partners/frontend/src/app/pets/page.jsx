@@ -14,7 +14,8 @@ export default function TopPage() {
   }, []);
 
   const handlePetSelection = (petId) => {
-    router.push(`/top/${petId}`);
+    sessionStorage.setItem('selectedPetId', petId); // petId を sessionStorage に保存
+    router.push(`/${petId}/top`); // ペット専用のページにリダイレクト
   };
 
   return (
