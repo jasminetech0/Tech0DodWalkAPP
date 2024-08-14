@@ -41,14 +41,14 @@
 .weatherIcon {
   width: 50px; /* 写真の幅を指定 */
   height: auto; /* 写真の高さを自動調整 */
-  margin-right: 1px; /* テキストとの間に余白を追加 */
+  margin-right: 10px; /* テキストとの間に余白を追加 */
 }
 
 /* 右側の写真のスタイル */
 .headerImage {
   width: 50px; /* 写真の幅を指定 */
   height: auto; /* 写真の高さを自動調整 */
-  margin-left: 1px; /* テキストとの間に余白を追加 */
+  margin-left: 10px; /* テキストとの間に余白を追加 */
   object-fit: cover; /* 画像をコンテナに収める */
   border-radius: 50%; /* 画像を円形にする */
 }

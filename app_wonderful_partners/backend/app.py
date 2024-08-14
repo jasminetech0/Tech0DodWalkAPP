@@ -30,16 +30,19 @@ load_dotenv(dotenv_path=dotenv_path)
 api_key = os.getenv("OPENAI_API_KEY").strip()
 print(f"API Key: {api_key}")
 
-
-
 # JWTシークレットキー
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///WP.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, 'db_control/WP.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['JWT_SECRET_KEY'] = app.config['SECRET_KEY']
 app.config['JWT_TOKEN_LOCATION'] = ['headers']  # トークンの場所をヘッダーに設定
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)  # トークンの有効期限を設定
+app.config['UPLOAD_FOLDER'] = 'uploads'
 
 # データベースをアプリケーションに紐付ける
 db.init_app(app)
@@ -212,52 +215,46 @@ def get_pets():
 
     return jsonify({"pets": pet_data}), 200
 
-@app.route('/pets/<int:pet_id>', methods=['GET'])
-@jwt_required()
-def get_pet_details(pet_id):
-    pet = Pet.query.get_or_404(pet_id)
-    pet_data = {"id": pet.id, "name": pet.name, "breed": pet.breed, "gender": pet.gender, "birthdate": pet.birthdate}
-
-    return jsonify(pet_data), 200
-
 @app.route('/pets/<int:pet_id>/record', methods=['POST'])
 @jwt_required()
 def add_pet_record(pet_id):
     user_id = get_jwt_identity()
-    
+
     data = request.json
+    print('Received data:', data)  # デバッグ用のログ
 
     pet = Pet.query.get_or_404(pet_id)
 
     if pet.user_id != user_id and not any(uf.family_id == pet.family_id for uf in UserFamily.query.filter_by(user_id=user_id).all()):
         return jsonify({"message": "You do not have permission to add a record for this pet"}), 403
 
-    # 空の文字列を None に変換する処理
     weight = data.get('weight')
     if weight == '':
         weight = None
     else:
-        weight = float(weight)  # 数値の場合は float に変換
+        weight = float(weight)
 
     record = PetRecord(
         pet_id=pet_id,
         user_id=user_id,
-        food_amount=data.get('food_amount'),
-        food_memo=data.get('food_memo'),
-        poop_amount=data.get('poop_amount'),
-        poop_consistency=data.get('poop_consistency'),
-        poop_memo=data.get('poop_memo'),
-        pee_amount=data.get('pee_amount'),
-        pee_memo=data.get('pee_memo'),
+        food_amount=data.get('foodAmount'),
+        food_memo=data.get('foodMemo'),
+        poop_amount=data.get('poopAmount'),
+        poop_consistency=data.get('poopConsistency'),
+        poop_memo=data.get('poopMemo'),
+        pee_amount=data.get('peeAmount'),
+        pee_memo=data.get('peeMemo'),
         weight=weight,
-        weight_memo=data.get('weight_memo'),
-        other_memo=data.get('other_memo')
+        weight_memo=data.get('weightMemo'),
+        other_memo=data.get('otherMemo'),
+        created_at=data.get('createdAt') if data.get('createdAt') else None
     )
 
     db.session.add(record)
     db.session.commit()
 
     return jsonify({"message": "Pet record added successfully!"}), 201
+
 
 @app.route('/protected', methods=['GET'])
 @jwt_required()
@@ -286,6 +283,86 @@ def create_caretask():
     db.session.commit()  # データをデータベースにコミットして保存
 
     return jsonify({"message": "CareTask registered successfully!"}), 200
+
+@app.route('/pets/<int:pet_id>', methods=['GET'])
+@jwt_required()
+def get_pet_details(pet_id):
+    print(f"Fetching details for pet_id: {pet_id}")  # デバッグ用のログ
+    pet = Pet.query.get_or_404(pet_id)
+    owner = User.query.get(pet.user_id)
+    
+    print(f"Owner: {owner.username}, Pet: {pet.name}")  # デバッグ用のログ
+
+    return jsonify({
+        "username": owner.username,
+        "petName": pet.name
+    }), 200
+
+
+@app.route('/pets/<int:pet_id>/least_records', methods=['GET'])
+@jwt_required()
+def get_least_records_user(pet_id):
+    user_id = get_jwt_identity()
+
+    pet = Pet.query.get_or_404(pet_id)
+
+    family_id = pet.family_id
+    family_members = UserFamily.query.filter_by(family_id=family_id).all()
+
+    record_counts = {}
+    for member in family_members:
+        # 記録がない場合は 0 にする
+        member_record_count = PetRecord.query.filter_by(pet_id=pet_id, user_id=member.user_id).count() or 0
+        record_counts[member.user_id] = member_record_count
+
+    # 記録が最も少ないユーザーを特定
+    least_active_user_id = min(record_counts, key=record_counts.get)
+    least_active_user = User.query.get(least_active_user_id)
+
+    return {
+        "least_active_user_id": least_active_user.id,
+        "least_active_username": least_active_user.username,
+        "record_count": record_counts[least_active_user_id]
+    }, 200
+
+
+@app.route('/pets/<int:pet_id>/invite_walk', methods=['POST'])
+@jwt_required()
+def invite_least_active_member_for_walk(pet_id):
+    user_id = get_jwt_identity()
+
+    # get_least_records_user の結果を取得
+    response, status_code = get_least_records_user(pet_id)
+    data = response  # response は JSON データの辞書
+
+    least_active_username = data['least_active_username']
+    pet = Pet.query.get_or_404(pet_id)
+
+    print(f'Least active user: {least_active_username}')  # デバッグ用のログ
+    print(f'Pet name: {pet.name}')  # デバッグ用のログ
+
+    # OpenAI API を使用して散歩のお誘い文を生成
+    prompt = f"{least_active_username}さんに散歩のお誘いをしてください。"
+    
+    openai_response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-0125",
+        messages=[
+            {"role": "system", "content": f"あなたは犬の{pet.name}です。"},
+            {"role": "user", "content": prompt},
+        ]
+    )
+
+    invitation_message = openai_response.choices[0].message['content']
+
+    print(f'Generated message: {invitation_message}')  # デバッグ用のログ
+
+    return jsonify({
+        "message": invitation_message,
+        "least_active_username": least_active_username  # この部分を追加
+    }), 200
+
+
+
 
 
 @app.route('/api/chats', methods=['POST'])
