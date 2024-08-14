@@ -110,7 +110,6 @@ class CareTask(db.Model):
 
 
 
-
 # テーブルを作成するための関数
 def create_tables():
     with app.app_context():
