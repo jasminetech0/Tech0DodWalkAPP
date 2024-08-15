@@ -62,12 +62,13 @@ const MyCalendar = () => {
   return (
     <div>
       <Header />
+      <div style={styles.calendarContainer}>
       <Calendar
         value={value}
         onClickDay={handleDayClick}
         locale={ja}  // ここにlocaleを追加
       />
-      <div>{value?.toLocaleDateString()}</div>
+      </div>
 
       {isModalOpen && (
         <div style={styles.modalOverlay}>
@@ -109,6 +110,12 @@ const MyCalendar = () => {
 };
 
 const styles = {
+  calendarContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '20px',  // 上の隙間
+    marginBottom: '20px',  // 下の隙間
+  },
   modalOverlay: {
     position: 'fixed',
     top: 0,
