@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import styles from './MainContent.module.css';
+import dynamic from 'next/dynamic';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls, Sky } from '@react-three/drei';
 
 const MainContent = ({ petId, petName }) => {
   const [invitationMessage, setInvitationMessage] = useState('');
@@ -35,9 +38,29 @@ const MainContent = ({ petId, petName }) => {
     fetchInvite();
   }, [petId]);
 
+  // VRMモデルのレンダリングを行うコンポーネントを非SSRで読み込む
+  const VRMModel = dynamic(() => import('../components/DogAvatar'), { ssr: false });
+
   return (
     <main className={styles.mainContent}>
-      <img src="/matthew-image.png" alt="犬の写真" className={styles.dogImage} />
+      {/*<img src="/matthew-image.png" alt="犬の写真" className={styles.dogImage} />*/}
+      <Canvas style={{ width: '100%', height: '40vh', backgroundColor: 'gray' }}>
+        <ambientLight intensity={1} />
+        <directionalLight position={[0, 10, 10]} intensity={1} />
+        <OrbitControls />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]}>
+          <planeGeometry args={[100, 100]} />
+          <meshStandardMaterial color="green" />
+        </mesh>
+        {/* Skyコンポーネントで背景に空を設定 */}
+        <Sky 
+          distance={450000} 
+          sunPosition={[1, 2, 3]} 
+          inclination={0.6} 
+          azimuth={0.25}
+        />
+        <VRMModel />
+      </Canvas>
 
       <div className={styles.horizontalLayout}>
         <div className={styles.profilePicContainer}>
