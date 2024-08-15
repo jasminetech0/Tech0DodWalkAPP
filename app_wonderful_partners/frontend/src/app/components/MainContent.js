@@ -65,6 +65,30 @@ const MainContent = ({ petId, petName }) => {
           </Link>
         </div>
       </div>
+
+      {/* 追加: 本日のマシュータイトル */}
+      <div className={styles.dailyTitle}>
+        本日のマシュー
+      </div>
+
+      {/* 追加: 散歩とごはんの情報を2列で表示 */}
+      <div className={styles.dailyActivities}>
+        <div className={styles.activityBox}>
+          <div className={styles.activityTitle}>散歩</div>
+          <div className={styles.activityDetails}>
+            05:00 - 05:30 （パパ）<br />
+            18:00 - 18:30 （パパ・けんちゃん）
+          </div>
+        </div>
+
+        <div className={styles.activityBox}>
+          <div className={styles.activityTitle}>ごはん</div>
+          <div className={styles.activityDetails}>
+            06:00 （ママ）<br />
+            18:00 （ママ）
+          </div>
+        </div>
+      </div>
     </main>
   );
 };

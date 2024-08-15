@@ -2,75 +2,125 @@
 
 /* 全体のメインコンテンツ */
 .mainContent {
-    padding: 20px;
-  }
-  
-  /* 上部の大きな写真 */
-  .dogImage {
-    width: auto;
-    height: auto;
-    display: block;
-    margin: 0 auto 20px; /* 写真を中央に配置し、下に余白を追加 */
-  }
-  
-  /* 横並びのレイアウト */
-  .horizontalLayout {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* 要素を中央に配置 */
-    gap: 10px; /* 要素間のスペースを調整 */
-  }
-  
-  /* 左側の丸いプロフィール写真 */
-  .profilePicContainer {
-    margin-right: 1px;
-  }
-  
-  .profilePic {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    image-rendering: crisp-edges; /* 画像のシャープさを保つ */
-  }
-  /* メール受信時刻の表示 */
-  .timeStamp {
-    font-size: 12px;
-    color: #fdf9f9; /* 今回はホワイトアウト */
-    text-align: center;
-    margin-top: 2px;
-  }
-  
-  /* 真ん中のメッセージボックス */
-  .messageBox {
-    border: 1px solid rgba(0, 0, 0, 0.521);
-    border-radius: 10px;
-    padding: 10px;
-    background-color: white;
-    max-width: 200px;
-    word-wrap: break-word;
-    position: relative;
-    flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
-    font: 600 0.75rem/1rem Roboto Flex; /* Figmaより */
-  }
-  
-  /* 返信ボタン */
-  .replyIcon {
-    width:25Px; /* 画像の幅を小さく設定 */
-    height:25px; /* 画像の高さを小さく設定 */
-    object-fit: cover; /* 画像を枠内に収める */
-    cursor: pointer; /* マウスオーバー時にポインターを表示 */
-  }
+  padding: 20px;
+}
 
-  /* 右側の返信リンク */
-  .replyLink {
-    margin-left: 10px;
-    color: #007bff;
-    cursor: pointer;
-  }
-  
-  .replyLink a {
-    text-decoration: none;
-    color: #007bff;
-  }
-  
+/* 上部の大きな写真 */
+.dogImage {
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px; /* 写真を中央に配置し、下に余白を追加 */
+}
+
+/* 横並びのレイアウト */
+.horizontalLayout {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 要素を中央に配置 */
+  gap: 10px; /* 要素間のスペースを調整 */
+}
+
+/* 左側の丸いプロフィール写真 */
+.profilePicContainer {
+  margin-right: 1px;
+}
+
+.profilePic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  image-rendering: crisp-edges; /* 画像のシャープさを保つ */
+}
+/* メール受信時刻の表示 */
+.timeStamp {
+  font-size: 12px;
+  color: #fdf9f9; /* 今回はホワイトアウト */
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* 真ん中のメッセージボックス */
+.messageBox {
+  border: 1px solid rgba(0, 0, 0, 0.521);
+  border-radius: 10px;
+  padding: 10px;
+  background-color: white;
+  max-width: 200px;
+  word-wrap: break-word;
+  position: relative;
+  flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
+  font: 600 0.75rem/1rem Roboto Flex; /* Figmaより */
+}
+
+/* 返信ボタン */
+.replyIcon {
+  width:25Px; /* 画像の幅を小さく設定 */
+  height:25px; /* 画像の高さを小さく設定 */
+  object-fit: cover; /* 画像を枠内に収める */
+  cursor: pointer; /* マウスオーバー時にポインターを表示 */
+}
+
+/* 右側の返信リンク */
+.replyLink {
+  margin-left: 10px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.replyLink a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+
+/* ”本日のマシュー" のスタイル */
+.dailyTitle {
+  font-weight: bold;
+  margin: 20px auto 10px auto; /* 上に20px,下に10pxの余白を設定し、中央に配置 */
+  text-align: center;
+  width: 200px; /* タイトルの幅を設定 */
+  background-color: #007bff; /* 背景色を淡いグレーに設定 */
+  padding: 1px; /* 内側の余白を設定 */
+  border-radius: 5px; /* 角を丸める */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 軽い影を追加して立体感を出す */
+  color: white; /* 文字色を白に設定 */
+}
+
+/* 散歩とごはんのコンテナ */
+.dailyActivities {
+  display: flex;
+  justify-content: center; /* 中央に配置 */
+  gap: 20px; /* ボックス間のスペースを調整 */
+  margin: 5px auto 0; /* 上に余白、左右の余白を自動に設定して中央揃え */
+  max-width: 600px; /* 任意で最大幅を設定 */
+  align-items: stretch; /* 子要素を同じ高さに揃える */
+}
+
+/* 散歩とごはんの項目スタイル */
+.activityBox {
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box; /* パディングを含めてサイズを計算 */
+}
+
+.activityBox.walk {
+  width: 350px; /* 散歩のボックスの幅を固定 */
+}
+
+.activityBox.meal {
+  width: 200px; /* ごはんのボックスの幅を固定 */
+}
+
+.activityDetails {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-wrap: break-word; /* テキストが長すぎる場合に折り返し */
+  font-family: 'Courier New', Courier, monospace; /* 等幅フォントを設定 */
+}
+
+/* ウェブセーフフォントを指定 */
+.activityDetails {
+  font-family: 'Verdana', Geneva, sans-serif; /* フォントをVerdanaに変更 */
+}
