@@ -1,6 +1,9 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
+
 
 export default function PetRecordPage({ params }) {
   const { petId } = params;
@@ -59,6 +62,8 @@ export default function PetRecordPage({ params }) {
 };
 
   return (
+    <div>
+    <Header />
     <form onSubmit={handleSubmit} style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>健康記録</h1>
       
@@ -210,5 +215,7 @@ export default function PetRecordPage({ params }) {
         記録を保存
       </button>
     </form>
+    <Footer />
+    </div>
   );
 }
