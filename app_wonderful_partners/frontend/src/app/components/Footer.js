@@ -16,13 +16,15 @@ const Footer = () => {
   return (
     <footer>
   <div className={styles['footer-buttons']}>
-    <button className={styles['footer-button']}>
-      <img
-        src="/home-button.png"
-        alt="ホーム"
-        className={styles['footer-icon']}
-      />
-    </button>
+    <Link href="/top" passHref>
+      <button className={styles['footer-button']}>
+        <img
+          src="/home-button.png"
+          alt="ホーム"
+          className={styles['footer-icon']}
+        />
+      </button>
+    </Link>
     <Link href={`/${petId}/top/record`} passHref>
       <button className={styles['footer-button']}>日々の<br />記録</button>
     </Link>
