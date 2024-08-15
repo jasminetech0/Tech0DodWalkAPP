@@ -2,6 +2,11 @@
 
 import React, { useState } from 'react';
 import styles from './ChatPage.module.css';  // スタイルシートをインポート
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
+
+
 
 const ChatPage = () => {
     const [messages, setMessages] = useState([]);
@@ -54,24 +59,29 @@ const ChatPage = () => {
 
   return (
     <div>
-        <div className={styles.messageList}>
-            {messages.map((msg, index) => (
-                <div key={index} className={styles.message}>
-                    <strong>{msg.sender}:</strong> {msg.text}
-                </div>
-            ))}
-        </div>
-        <div className={styles.inputContainer}>
-            <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="メッセージを入力"
-                className={styles.inputField}
-            />
-            <button onClick={sendMessage} disabled={isBotTurn} className={styles.sendButton}>送信</button>
-        </div>
+    <Header />
+    <div className={styles.messageList}>
+        {messages.map((msg, index) => (
+            <div key={index} className={styles.message}>
+                <strong>{msg.sender}:</strong> {msg.text}
+            </div>
+        ))}
     </div>
+    <div className={styles.inputContainer}>
+        <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="メッセージを入力"
+            className={styles.inputField}
+        />
+        <button onClick={sendMessage} disabled={isBotTurn} className={styles.sendButton}>
+            送信
+        </button>
+    </div>
+    <Footer />
+</div>
+
 );
 
 };
