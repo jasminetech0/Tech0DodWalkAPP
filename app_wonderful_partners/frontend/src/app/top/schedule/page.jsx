@@ -2,6 +2,11 @@
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import Header from '../../components/Header';  // 正しいパスに修正
+import Footer from '../../components/Footer';
+import { ja } from 'date-fns/locale';
+
+
 
 const MyCalendar = () => {
   const [value, setValue] = useState();  // カレンダーの日付選択
@@ -52,15 +57,15 @@ const MyCalendar = () => {
     }
   };
 
-
-
   
 
   return (
     <div>
+      <Header />
       <Calendar
         value={value}
         onClickDay={handleDayClick}
+        locale={ja}  // ここにlocaleを追加
       />
       <div>{value?.toLocaleDateString()}</div>
 
@@ -98,6 +103,7 @@ const MyCalendar = () => {
           </div>
         </div>
       )}
+       <Footer />
     </div>
   );
 };
