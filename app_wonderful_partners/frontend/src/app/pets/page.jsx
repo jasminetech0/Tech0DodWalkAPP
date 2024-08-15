@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import styles from './pets.module.css'; // CSS Modulesをインポート
 
 export default function TopPage() {
   const router = useRouter();
@@ -14,18 +15,18 @@ export default function TopPage() {
   }, []);
 
   const handlePetSelection = (petId) => {
-    sessionStorage.setItem('selectedPetId', petId); // petId を sessionStorage に保存
-    router.push(`/${petId}/top`); // ペット専用のページにリダイレクト
+    sessionStorage.setItem('selectedPetId', petId);
+    router.push(`/${petId}/top`);
   };
 
   return (
-    <div>
-      <h1>ペットを選択してください</h1>
+    <div className={styles.container}> {/* containerクラスを適用 */}
+      <h1 className={styles.title}>ペットを選択してください</h1> {/* titleクラスを適用 */}
       {pets.length > 0 ? (
-        <ul>
+        <ul className={styles.list}> {/* listクラスを適用 */}
           {pets.map((pet) => (
             <li key={pet.id}>
-              <button onClick={() => handlePetSelection(pet.id)}>
+              <button className={styles.button} onClick={() => handlePetSelection(pet.id)}>
                 {pet.name}
               </button>
             </li>

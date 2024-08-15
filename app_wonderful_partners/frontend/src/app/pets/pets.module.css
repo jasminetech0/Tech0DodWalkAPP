@@ -1,0 +1,59 @@
+/* pets.module.css */
+.container {
+    max-width: 400px;
+    margin: 40px auto; /* 上に余白を追加して中央寄せ */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #333;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .label {
+    font-size: 1.2rem;
+    margin-right: 10px;
+    color: #333;
+  }
+  
+  .checkbox {
+    transform: scale(1.5); /* チェックボックスを拡大表示 */
+  }
+  
+  .button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    width: 100%; /* ボタンを親の幅に合わせる */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
