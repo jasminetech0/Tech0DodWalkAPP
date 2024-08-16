@@ -1,5 +1,3 @@
-/* MainContent.module.css */
-
 /* 全体のメインコンテンツ */
 .mainContent {
   padding: 20px;
@@ -13,17 +11,29 @@
   margin: 0 auto 20px; /* 写真を中央に配置し、下に余白を追加 */
 }
 
+/* メッセージとプロフィール写真、返信ボタンを含む全体のコンテナ */
+.messageAndProfileContainer {
+  display: flex;
+  align-items: center; /* 中央揃えに変更 */
+  justify-content: center; /* コンテンツを中央に配置 */
+  width: 100%; /* 全体を幅いっぱいに広げる */
+  margin-top: 10px; /* 上に余白を追加 */
+}
+
 /* 横並びのレイアウト */
 .horizontalLayout {
   display: flex;
-  align-items: center;
+  align-items: center; /* 中央揃えに変更 */
   justify-content: center; /* 要素を中央に配置 */
   gap: 10px; /* 要素間のスペースを調整 */
+  width: auto; /* コンテナの幅を自動に設定 */
 }
 
 /* 左側の丸いプロフィール写真 */
 .profilePicContainer {
-  margin-right: 1px;
+  display: flex;
+  align-items: center; /* 中央揃えに変更 */
+  justify-content: center;
 }
 
 .profilePic {
@@ -33,12 +43,13 @@
   object-fit: cover;
   image-rendering: crisp-edges; /* 画像のシャープさを保つ */
 }
-/* メール受信時刻の表示 */
-.timeStamp {
-  font-size: 12px;
-  color: #fdf9f9; /* 今回はホワイトアウト */
-  text-align: center;
-  margin-top: 2px;
+
+/* メッセージボックスと返信ボタンを含むコンテナ */
+.messageBoxContainer {
+  display: flex;
+  align-items: flex-end; /* メッセージボックスと返信ボタンを下端で揃える */
+  justify-content: center; /* 要素を中央に配置 */
+  flex-grow: 1; /* メッセージボックスを広げるために設定 */
 }
 
 /* 真ん中のメッセージボックス */
@@ -47,19 +58,24 @@
   border-radius: 10px;
   padding: 10px;
   background-color: white;
-  max-width: 200px;
+  max-width: 300px; /* 最大幅を300pxに設定 */
+  min-width: 250px; /* 最小幅を250pxに設定 */
   word-wrap: break-word;
   position: relative;
   flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
   font: 600 0.75rem/1rem Roboto Flex; /* Figmaより */
+  margin-top: 20px; /* 上に20pxの余白を追加 */
+  margin-right: 10px; /* 右に余白を追加して返信ボタンとスペースを確保 */
 }
 
 /* 返信ボタン */
 .replyIcon {
-  width:25Px; /* 画像の幅を小さく設定 */
-  height:25px; /* 画像の高さを小さく設定 */
+  width: 25px; /* 画像の幅を小さく設定 */
+  height: 25px; /* 画像の高さを小さく設定 */
   object-fit: cover; /* 画像を枠内に収める */
   cursor: pointer; /* マウスオーバー時にポインターを表示 */
+  margin-left: auto; /* 自動で左側に余白を確保 */
+  align-self: flex-end; /* 返信ボタンをメッセージボックスの下側に揃える */
 }
 
 /* 右側の返信リンク */
@@ -74,11 +90,10 @@
   color: #007bff;
 }
 
-
 /* ”本日のマシュー" のスタイル */
 .dailyTitle {
   font-weight: bold;
-  margin: 20px auto 10px auto; /* 上に20px,下に10pxの余白を設定し、中央に配置 */
+  margin: 20px auto 1px auto; /* 上に20px,下に1pxの余白を設定し、中央に配置 */
   text-align: center;
   width: 350px; /* タイトルの幅を設定 */
   background-color: #8a8b8b; /* 背景色を淡いグレーに設定 */
@@ -91,11 +106,11 @@
 /* 散歩とごはんのコンテナ */
 .dailyActivities {
   display: flex;
-  justify-content: center; /* 中央に配置 */
-  gap: 0.1px; /* ボックス間のスペースを調整 */
-  margin: 5px auto 0; /* 上に余白、左右の余白を自動に設定して中央揃え */
-  max-width: 600px; /* 任意で最大幅を設定 */
-  align-items: stretch; /* 子要素を同じ高さに揃える */
+  justify-content: center; /* ボックスを中央揃え */
+  gap: 1px; /* ボックス間のスペースを調整 */
+  margin: 5px auto; /* 上に余白、左右の余白を自動に設定して中央揃え */
+  max-width: 800px; /* コンテナの最大幅を設定 */
+  align-items: center; /* 子要素を中央に揃える */
 }
 
 /* 散歩とごはんの項目スタイル */
@@ -103,20 +118,24 @@
   border-radius: 5px;
   padding: 10px;
   box-sizing: border-box; /* パディングを含めてサイズを計算 */
+  white-space: nowrap; /* 改行を防ぎ、テキストを一行で表示 */
+  overflow: hidden; /* テキストがあふれる場合に隠す */
+  text-overflow: ellipsis; /* テキストがあふれる場合に省略記号を表示 */
+  flex: 0 1 auto; /* 要素がコンテナの幅に応じて適切にサイズを調整する */
 }
 
 .activityBox.walk {
-  width: 350px; /* 散歩のボックスの幅を固定 */
+  flex-basis: auto; /* 散歩のボックスがテキストに応じて幅を自動調整する */
 }
 
 .activityBox.meal {
-  width: 200px; /* ごはんのボックスの幅を固定 */
+  flex-basis: auto; /* ごはんのボックスもテキストに応じて幅を自動調整する */
 }
 
 .activityDetails {
   font-size: 0.9rem;
   line-height: 1.4;
-  word-wrap: break-word; /* テキストが長すぎる場合に折り返し */
+  word-wrap: normal; /* テキストが長すぎる場合に折り返しを無効に設定 */
   font-family: 'Courier New', Courier, monospace; /* 等幅フォントを設定 */
 }
 
