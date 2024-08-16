@@ -82,6 +82,7 @@ const fetchWeatherData = async (location, setWeather) => {
       feels_like: data.main.feels_like, //　体感温度を追加
       humidity: data.main.humidity,
       wind: data.wind.speed,
+      rain: data.rain ? data.rain['1h'] : 0, // 1時間あたりの降水量 (mm)
     });
   } catch (error) {
     console.error('Error fetching weather data:', error);
@@ -129,7 +130,7 @@ const Header = () => {
             <div className={styles.firstLine}>{currentDate}</div> {/* 現在の日付を表示 */}
             <div className={styles.thirdLine}> 🌡気温🌡 {weather.temp}℃</div> {/* 2行目 */}
             <div>体感温度 {weather.feels_like}℃</div> {/* 体感温度 */}
-            <div>湿度 {weather.humidity}%</div> {/* 湿度情報 */}
+            <div>降水量 {weather.rain}mm/h</div> {/* 降水量情報 */}
             <div>軽い風 {weather.wind}m/s</div> {/* 風の情報 */}
           </div>
           
