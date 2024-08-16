@@ -96,17 +96,19 @@ class CareTask(db.Model):
     __tablename__ = 'caretask_table'
 
     caretask_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外部キー
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     task_name = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.String(20), default='pending')  # デフォルトは未完了
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # 自動生成される作成日時
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)  # 自動更新される更新日時
+    status = db.Column(db.String(20), default='pending')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __init__(self, user_id, date, task_name):
+    def __init__(self, user_id, date, task_name, status='pending'):
         self.user_id = user_id
         self.date = date
         self.task_name = task_name
+        self.status = status  # `status` 引数を追加
+
 
 
 
