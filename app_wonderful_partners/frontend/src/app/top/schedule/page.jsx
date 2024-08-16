@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Header from '../../components/Header';  // 正しいパスに修正
@@ -12,6 +12,30 @@ const MyCalendar = () => {
   const [value, setValue] = useState();  // カレンダーの日付選択
   const [isModalOpen, setIsModalOpen] = useState(false);  // モーダルの開閉管理
   const [selectedTasks, setSelectedTasks] = useState([]);  // 選択された作業の管理 
+  const [tasks, setTasks] = useState({});  // 日付ごとのタスクデータを管理
+
+  // テストデータを取得してステートに保存
+  useEffect(() => {
+    fetch('http://localhost:5000/api/get_all_tasks')  // すべてのタスクを取得するAPIエンドポイント
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Fetched tasks:", data);  // デバッグ用
+        setTasks(data);
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }, []);
+
+  
+
+
+
 
   // 日付クリックでモーダルを開く
   const handleDayClick = (date) => {
@@ -57,6 +81,29 @@ const MyCalendar = () => {
     }
   };
 
+   // 日付ごとのタスクをカレンダーに表示
+const renderTileContent = ({ date, view }) => {
+  if (view === 'month') {
+    const dateStr = date.toISOString().split('T')[0]; // 'YYYY-MM-DD' 形式に変換
+    const taskForDate = tasks[dateStr]; // 日付に対応するタスクを取得
+    if (taskForDate) {
+      return (
+        <div style={styles.tileContent}>  {/* 修正箇所 */}
+          {taskForDate.map((task, index) => (
+            <div key={index} style={styles.taskItem}>  {/* 修正箇所 */}
+              <strong>{task.task_name}</strong><br/>
+              <span>{`User ID: ${task.user_id}`}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+  }
+  return null;
+};
+
+
+
   
 
   return (
@@ -67,7 +114,9 @@ const MyCalendar = () => {
         value={value}
         onClickDay={handleDayClick}
         locale={ja}  // ここにlocaleを追加
-      />
+        tileContent={renderTileContent}  // カレンダーにタスクを表示するコンテンツを追加
+        style={{ width: '100%' }}  // カレンダーの幅を100%に設定
+        />
       </div>
 
       {isModalOpen && (
@@ -115,6 +164,8 @@ const styles = {
     justifyContent: 'center',
     marginTop: '20px',  // 上の隙間
     marginBottom: '20px',  // 下の隙間
+    width: '100%',  // カレンダーの幅を100%に設定
+    maxWidth: '1200px',  // 最大幅を設定して、非常に広がりすぎないようにする
   },
   modalOverlay: {
     position: 'fixed',
@@ -162,6 +213,27 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
   },
+
+  // 新しく追加するスタイル
+  tileContent: {
+    display: 'flex',  // フレックスボックスを使用
+    flexDirection: 'row',  // 横に並べる
+    flexWrap: 'wrap',  // 幅が足りない場合は折り返す
+    justifyContent: 'center',  // 中央揃え
+    alignItems: 'center',  // 中央揃え
+    gap: '5px',  // タスク間の隙間
+    padding: '5px',
+  },
+  taskItem: {
+    backgroundColor: '#f0f0f0',  // 背景色
+    borderRadius: '5px',  // 角を丸める
+    padding: '2px 4px',  // 内側の余白
+    minWidth: '60px',  // 各タスクの最小幅
+    textAlign: 'center',  // テキストを中央揃え
+  },
+
+
+
 };
 
 export default MyCalendar;

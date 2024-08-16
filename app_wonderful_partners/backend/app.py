@@ -267,22 +267,25 @@ def protected():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-# /api/tasks エンドポイントの作成（ユーザーがカレンダーで"登録"ボタンを押すと、世話を予約できる)
-@app.route('/api/caretasks', methods=['POST'])
-def create_caretask():
-    data = request.json  # フロントエンドから送られたJSONデータを取得
-    
-    user_id = data['user_id']
-    date = data['date']
-    tasks = data['tasks']  # ここで、複数のタスクがリスト形式で送られてくることを想定
+# /api/tasks エンドポイントの作成（テストデータをカレンダーに表示する)
+@app.route('/api/get_all_tasks', methods=['GET'])
+def get_all_tasks():
+    tasks = CareTask.query.all()  # 全てのタスクを取得
 
-    # 各タスクをデータベースに保存
-    for task_name in tasks:
-        new_task = CareTask(user_id=user_id, date=date, task_name=task_name)
-        db.session.add(new_task)
-    db.session.commit()  # データをデータベースにコミットして保存
+    # 日付ごとにタスクを整理
+    tasks_by_date = {}
+    for task in tasks:
+        date_str = task.date.strftime('%Y-%m-%d')
+        if date_str not in tasks_by_date:
+            tasks_by_date[date_str] = []
+        tasks_by_date[date_str].append({
+            'task_name': task.task_name,
+            'user_id': task.user_id,
+            'status': task.status
+        })
 
-    return jsonify({"message": "CareTask registered successfully!"}), 200
+    return jsonify(tasks_by_date)
+
 
 @app.route('/pets/<int:pet_id>', methods=['GET'])
 @jwt_required()
