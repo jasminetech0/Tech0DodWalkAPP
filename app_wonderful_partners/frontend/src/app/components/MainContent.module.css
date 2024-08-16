@@ -80,8 +80,8 @@
   font-weight: bold;
   margin: 20px auto 10px auto; /* 上に20px,下に10pxの余白を設定し、中央に配置 */
   text-align: center;
-  width: 200px; /* タイトルの幅を設定 */
-  background-color: #007bff; /* 背景色を淡いグレーに設定 */
+  width: 350px; /* タイトルの幅を設定 */
+  background-color: #8a8b8b; /* 背景色を淡いグレーに設定 */
   padding: 1px; /* 内側の余白を設定 */
   border-radius: 5px; /* 角を丸める */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 軽い影を追加して立体感を出す */
@@ -92,7 +92,7 @@
 .dailyActivities {
   display: flex;
   justify-content: center; /* 中央に配置 */
-  gap: 20px; /* ボックス間のスペースを調整 */
+  gap: 0.1px; /* ボックス間のスペースを調整 */
   margin: 5px auto 0; /* 上に余白、左右の余白を自動に設定して中央揃え */
   max-width: 600px; /* 任意で最大幅を設定 */
   align-items: stretch; /* 子要素を同じ高さに揃える */
