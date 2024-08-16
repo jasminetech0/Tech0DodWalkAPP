@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 
-const VRMModel = () => {
+const VRMModel = ({ message }) => {  // メッセージを受け取るように修正
   const modelRef = useRef(null);
   const mixerRef = useRef(null);
 
@@ -20,7 +20,6 @@ const VRMModel = () => {
 
       // モーション1: 歩行アニメーション
       const walkAnimation = new THREE.AnimationClip("walk", -1, [
-        // hipsの移動（前進）
         new THREE.VectorKeyframeTrack(
           "hips.position",
           [0, 1, 2], 
@@ -38,26 +37,7 @@ const VRMModel = () => {
         )
       ]);
 
-      // モーション2: 笑顔と手の振り
-      const smileAndWaveAnimation = new THREE.AnimationClip("smileAndWave", -1, [
-        new THREE.QuaternionKeyframeTrack(
-          "upper_armL.quaternion",
-          [0, 1, 2], 
-          [0.5, 0, 0, 0.866, -0.5, 0, 0, 0.866, 0.5, 0, 0, 0.866]
-        ),
-        new THREE.QuaternionKeyframeTrack(
-          "upper_armR.quaternion",
-          [0, 1, 2], 
-          [-0.5, 0, 0, 0.866, 0.5, 0, 0, 0.866, -0.5, 0, 0, 0.866]
-        ),
-        new THREE.NumberKeyframeTrack(
-          "BlendShape.Smile", 
-          [0, 1, 2], 
-          [0, 1, 0.8]
-        )
-      ]);
-
-      // モーション3: ジャンプアニメーション
+      // アニメーション2: ジャンプアニメーション
       const jumpAnimation = new THREE.AnimationClip("jump", -1, [
         new THREE.VectorKeyframeTrack(
           "hips.position",
@@ -76,17 +56,17 @@ const VRMModel = () => {
         )
       ]);
 
-      // アニメーションをランダムに選択
-      const animations = [walkAnimation, smileAndWaveAnimation, jumpAnimation];
-      const selectedAnimation = animations[Math.floor(Math.random() * animations.length)];
-
-      const action = mixer.clipAction(selectedAnimation);
+      const action = mixer.clipAction(walkAnimation);
       action.setLoop(THREE.LoopRepeat);
       action.play();
 
-      console.log("Random animation started");
+      console.log("Walk animation started");
 
       mixerRef.current = mixer;
+
+      // メッセージに応じてBlendShape（表情）を変えるロジック
+      const blendShapeProxy = gltf.userData.vrm.expressionManager;
+      updateBlendShape(blendShapeProxy, message);
     }, undefined, (error) => {
       console.error("Error loading VRM model:", error);
     });
@@ -97,13 +77,25 @@ const VRMModel = () => {
         mixerRef.current = null;
       }
     };
-  }, []);
+  }, [message]);
 
   useFrame((_, delta) => {
     if (mixerRef.current) {
       mixerRef.current.update(delta);
     }
   });
+
+  const updateBlendShape = (blendShapeProxy, message) => {
+    // メッセージに応じた表情を設定
+    if (message.includes("笑顔")) {
+      blendShapeProxy.setValue("Smile", 1.0);  // 笑顔のBlendShapeを最大に
+    } else if (message.includes("驚き")) {
+      blendShapeProxy.setValue("Surprised", 1.0);  // 驚きのBlendShapeを最大に
+    } else {
+      blendShapeProxy.setValue("Smile", 0.0);  // その他の場合は無表情
+      blendShapeProxy.setValue("Surprised", 0.0);
+    }
+  };
 
   return <group ref={modelRef} />;
 };

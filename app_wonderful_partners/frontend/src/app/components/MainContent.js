@@ -11,6 +11,18 @@ const MainContent = ({ petId, petName }) => {
 
   useEffect(() => {
     const fetchInvite = async () => {
+      const today = new Date().toISOString().split('T')[0]; // 今日の日付 (yyyy-mm-dd 形式)
+      const lastUpdated = localStorage.getItem(`lastUpdated-${petId}`);
+      const savedMessage = localStorage.getItem(`inviteMessage-${petId}`);
+      const savedUsername = localStorage.getItem(`leastActiveUsername-${petId}`);
+
+      // 最後に更新された日付と今日の日付が同じで、保存されたメッセージがあればそれを表示
+      if (lastUpdated === today && savedMessage && savedUsername) {
+        setInvitationMessage(savedMessage);
+        setUsername(savedUsername);
+        return;
+      }
+
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(`http://127.0.0.1:5000/pets/${petId}/invite_walk`, {
@@ -24,7 +36,11 @@ const MainContent = ({ petId, petName }) => {
         if (response.ok) {
           const data = await response.json();
           setInvitationMessage(data.message);
-          setUsername(data.least_active_username);  // 最も記録が少ないユーザー名をセット
+          setUsername(data.least_active_username);
+          // ローカルストレージにメッセージ、ユーザー名、そして更新日を保存
+          localStorage.setItem(`inviteMessage-${petId}`, data.message);
+          localStorage.setItem(`leastActiveUsername-${petId}`, data.least_active_username);
+          localStorage.setItem(`lastUpdated-${petId}`, today);
         } else {
           console.error('Error fetching invite:', response.statusText);
           setInvitationMessage('お誘いの生成に失敗しました。');
@@ -43,7 +59,6 @@ const MainContent = ({ petId, petName }) => {
 
   return (
     <main className={styles.mainContent}>
-      {/*<img src="/matthew-image.png" alt="犬の写真" className={styles.dogImage} />*/}
       <Canvas style={{ width: '100%', height: '40vh', backgroundColor: 'gray' }}>
         <ambientLight intensity={1} />
         <directionalLight position={[0, 10, 10]} intensity={1} />
@@ -52,14 +67,13 @@ const MainContent = ({ petId, petName }) => {
           <planeGeometry args={[100, 100]} />
           <meshStandardMaterial color="green" />
         </mesh>
-        {/* Skyコンポーネントで背景に空を設定 */}
         <Sky 
           distance={450000} 
           sunPosition={[1, 2, 3]} 
           inclination={0.6} 
           azimuth={0.25}
         />
-        <VRMModel />
+        <VRMModel message={invitationMessage} /> {/* メッセージを渡す */}
       </Canvas>
 
       <div className={styles.messageAndProfileContainer}>
