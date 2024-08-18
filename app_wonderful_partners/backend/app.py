@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -202,6 +202,7 @@ def login():
     else:
         return jsonify({"message": "Invalid email or password"}), 401
 
+
 @app.route('/pets', methods=['GET'])
 @jwt_required()
 def get_pets():
@@ -237,6 +238,7 @@ def add_pet_record(pet_id):
     record = PetRecord(
         pet_id=pet_id,
         user_id=user_id,
+        food_type=data.get('foodType'),  # ごはんの種類を追加
         food_amount=data.get('foodAmount'),
         food_memo=data.get('foodMemo'),
         poop_amount=data.get('poopAmount'),
@@ -254,6 +256,7 @@ def add_pet_record(pet_id):
     db.session.commit()
 
     return jsonify({"message": "Pet record added successfully!"}), 201
+
 
 
 @app.route('/protected', methods=['GET'])
@@ -345,7 +348,7 @@ def invite_least_active_member_for_walk(pet_id):
     print(f'Pet name: {pet.name}')  # デバッグ用のログ
 
     # OpenAI API を使用して散歩のお誘い文を生成
-    prompt = f"{least_active_username}さんに散歩のお誘いをしてください。"
+    prompt = f"{least_active_username}に散歩のお誘いをしてください。"
     
     openai_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0125",
@@ -364,22 +367,20 @@ def invite_least_active_member_for_walk(pet_id):
         "least_active_username": least_active_username  # この部分を追加
     }), 200
 
-
-
-
-
 @app.route('/api/chats', methods=['POST'])
 def chat():
-    message = request.get_json()  # クライアントからのJSONデータを取得
-    
-    
+    data = request.get_json()  # クライアントからのJSONデータを取得
+    message_content = data.get('message')  # メッセージの文字列を取得
+
+    if not isinstance(message_content, str):
+        return jsonify({'error': 'Message content must be a string'}), 400  # エラーハンドリング
 
     # ChatGPT APIにメッセージを送信して応答を取得
     response = openai.ChatCompletion.create( 
         model="gpt-3.5-turbo-0125",  # 安価なモデルを指定
         messages=[
-            {"role": "system", "content": "あなたは犬のマシューです。"},
-            {"role": "user", "content": message}
+            {"role": "system", "content": "あなたは犬のマシューです。散歩のお誘いを行いました。"},
+            {"role": "user", "content": message_content}  # 文字列として送信
         ],
         max_tokens=50
     )
@@ -393,7 +394,6 @@ def chat():
 
     return jsonify({'reply': reply})
 
-  
 
 
 @app.route('/')

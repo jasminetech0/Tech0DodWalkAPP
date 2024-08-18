@@ -10,6 +10,7 @@ export default function PetRecordPage({ params }) {
   const router = useRouter();
 
   const [record, setRecord] = useState({
+    foodType: '',  // 新しく追加
     foodAmount: '',
     foodMemo: '',
     poopAmount: '',
@@ -59,52 +60,111 @@ export default function PetRecordPage({ params }) {
         console.error('Error:', errorData);
         alert('記録の保存に失敗しました。');
     }
-};
+  };
 
   return (
     <div>
-    <Header />
-    <form onSubmit={handleSubmit} style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>健康記録</h1>
-      
-      <section>
-        <h2>ごはんの記録</h2>
-        {['完食', '少し残した', 'たくさん残した'].map((option) => (
-          <button
-            type="button"
-            key={option}
-            onClick={() => handleSelection('foodAmount', option)}
-            style={{
-              backgroundColor: record.foodAmount === option ? '#0070f3' : '#ccc',
-              color: 'white',
-              padding: '10px',
-              margin: '5px',
-              borderRadius: '5px',
-            }}
-          >
-            {option}
-          </button>
-        ))}
-        <textarea
-          name="foodMemo"
-          value={record.foodMemo}
-          onChange={handleInputChange}
-          placeholder="ごはんのメモ"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
-        />
-      </section>
+      <Header />
+      <form onSubmit={handleSubmit} style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+        <h1>健康記録</h1>
 
-      <section>
-        <h2>うんちの記録</h2>
-        <div>
-          <h3>量</h3>
+        <section>
+          <h2>ごはんの種類</h2>
+          <input
+            type="text"
+            name="foodType"
+            value={record.foodType}
+            onChange={handleInputChange}
+            placeholder="ごはんの種類"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%' }}
+          />
+        </section>
+
+        <section>
+          <h2>ごはんの記録</h2>
+          {['完食', '少し残した', 'たくさん残した'].map((option) => (
+            <button
+              type="button"
+              key={option}
+              onClick={() => handleSelection('foodAmount', option)}
+              style={{
+                backgroundColor: record.foodAmount === option ? '#0070f3' : '#ccc',
+                color: 'white',
+                padding: '10px',
+                margin: '5px',
+                borderRadius: '5px',
+              }}
+            >
+              {option}
+            </button>
+          ))}
+          <textarea
+            name="foodMemo"
+            value={record.foodMemo}
+            onChange={handleInputChange}
+            placeholder="ごはんのメモ"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
+          />
+        </section>
+
+        <section>
+          <h2>うんちの記録</h2>
+          <div>
+            <h3>量</h3>
+            {['多い', '普通', '少ない'].map((option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() => handleSelection('poopAmount', option)}
+                style={{
+                  backgroundColor: record.poopAmount === option ? '#0070f3' : '#ccc',
+                  color: 'white',
+                  padding: '10px',
+                  margin: '5px',
+                  borderRadius: '5px',
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          <div>
+            <h3>硬さ</h3>
+            {['柔らかい', '普通', 'かたい'].map((option) => (
+              <button
+                type="button"
+                key={option}
+                onClick={() => handleSelection('poopConsistency', option)}
+                style={{
+                  backgroundColor: record.poopConsistency === option ? '#0070f3' : '#ccc',
+                  color: 'white',
+                  padding: '10px',
+                  margin: '5px',
+                  borderRadius: '5px',
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          <textarea
+            name="poopMemo"
+            value={record.poopMemo}
+            onChange={handleInputChange}
+            placeholder="うんちのメモ"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
+          />
+        </section>
+
+        <section>
+          <h2>おしっこの記録</h2>
           {['多い', '普通', '少ない'].map((option) => (
             <button
               type="button"
               key={option}
-              onClick={() => handleSelection('poopAmount', option)}
+              onClick={() => handleSelection('peeAmount', option)}
               style={{
-                backgroundColor: record.poopAmount === option ? '#0070f3' : '#ccc',
+                backgroundColor: record.peeAmount === option ? '#0070f3' : '#ccc',
                 color: 'white',
                 padding: '10px',
                 margin: '5px',
@@ -114,108 +174,61 @@ export default function PetRecordPage({ params }) {
               {option}
             </button>
           ))}
-        </div>
-        <div>
-          <h3>硬さ</h3>
-          {['柔らかい', '普通', 'かたい'].map((option) => (
-            <button
-              type="button"
-              key={option}
-              onClick={() => handleSelection('poopConsistency', option)}
-              style={{
-                backgroundColor: record.poopConsistency === option ? '#0070f3' : '#ccc',
-                color: 'white',
-                padding: '10px',
-                margin: '5px',
-                borderRadius: '5px',
-              }}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-        <textarea
-          name="poopMemo"
-          value={record.poopMemo}
-          onChange={handleInputChange}
-          placeholder="うんちのメモ"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
-        />
-      </section>
+          <textarea
+            name="peeMemo"
+            value={record.peeMemo}
+            onChange={handleInputChange}
+            placeholder="おしっこのメモ"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
+          />
+        </section>
 
-      <section>
-        <h2>おしっこの記録</h2>
-        {['多い', '普通', '少ない'].map((option) => (
-          <button
-            type="button"
-            key={option}
-            onClick={() => handleSelection('peeAmount', option)}
-            style={{
-              backgroundColor: record.peeAmount === option ? '#0070f3' : '#ccc',
-              color: 'white',
-              padding: '10px',
-              margin: '5px',
-              borderRadius: '5px',
-            }}
-          >
-            {option}
-          </button>
-        ))}
-        <textarea
-          name="peeMemo"
-          value={record.peeMemo}
-          onChange={handleInputChange}
-          placeholder="おしっこのメモ"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
-        />
-      </section>
+        <section>
+          <h2>体重</h2>
+          <input
+            type="number"
+            name="weight"
+            value={record.weight}
+            onChange={handleInputChange}
+            placeholder="体重 (kg)"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%' }}
+          />
+          <textarea
+            name="weightMemo"
+            value={record.weightMemo}
+            onChange={handleInputChange}
+            placeholder="体重のメモ"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
+          />
+        </section>
 
-      <section>
-        <h2>体重</h2>
-        <input
-          type="number"
-          name="weight"
-          value={record.weight}
-          onChange={handleInputChange}
-          placeholder="体重 (kg)"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%' }}
-        />
-        <textarea
-          name="weightMemo"
-          value={record.weightMemo}
-          onChange={handleInputChange}
-          placeholder="体重のメモ"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '50px' }}
-        />
-      </section>
+        <section>
+          <h2>その他</h2>
+          <textarea
+            name="otherMemo"
+            value={record.otherMemo}
+            onChange={handleInputChange}
+            placeholder="その他のメモ"
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '100px' }}
+          />
+        </section>
 
-      <section>
-        <h2>その他</h2>
-        <textarea
-          name="otherMemo"
-          value={record.otherMemo}
-          onChange={handleInputChange}
-          placeholder="その他のメモ"
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%', height: '100px' }}
-        />
-      </section>
+        <section>
+          <h2>発生日時</h2>
+          <input
+            type="datetime-local"
+            name="createdAt"
+            value={record.createdAt}
+            onChange={handleInputChange}
+            style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%' }}
+          />
+        </section>
 
-      <section>
-        <h2>発生日時</h2>
-        <input
-          type="datetime-local"
-          name="createdAt"
-          value={record.createdAt}
-          onChange={handleInputChange}
-          style={{ padding: '10px', margin: '5px', borderRadius: '5px', width: '100%' }}
-        />
-      </section>
-
-      <button type="submit" style={{ backgroundColor: '#0070f3', color: 'white', padding: '10px', margin: '10px 0', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>
-        記録を保存
-      </button>
-    </form>
-    <Footer />
+        <button type="submit" style={{ backgroundColor: '#0070f3', color: 'white', padding: '10px', margin: '10px 0', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>
+          記録を保存
+        </button>
+      </form>
+      <Footer />
     </div>
   );
 }

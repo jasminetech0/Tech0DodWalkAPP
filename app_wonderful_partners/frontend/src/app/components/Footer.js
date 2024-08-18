@@ -16,7 +16,7 @@ const Footer = () => {
   return (
     <footer>
       <div className={styles['footer-buttons']}>
-        <Link href="/top" passHref>
+        <Link href={`/${petId}/top/`} passHref>
           <button className={styles['footer-button']}>
             <img
               src="/home-button.png"
@@ -32,11 +32,11 @@ const Footer = () => {
 
         <button className={styles['footer-button']}>記録<br />確認</button>
 
-        <Link href="/top/schedule" passHref>
+        <Link href={`/${petId}/top/schedule`} passHref>
           <button className={styles['footer-button']}>お世話の<br />予約</button>
         </Link>  {/* ここでしっかり閉じる */}
 
-        <Link href={`/top/${petId}/shop`} passHref>
+        <Link href={`/${petId}/top/shop`} passHref>
           <button className={styles['footer-button']}>わん<br />モール</button> 
         </Link>
 

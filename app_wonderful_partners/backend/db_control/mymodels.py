@@ -1,6 +1,5 @@
-from sqlalchemy import ForeignKey, Integer, String, Date, create_engine, Text, Column
+from sqlalchemy import ForeignKey, Integer, String, Date, create_engine, Text, Column, Float, DateTime
 from datetime import datetime
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -44,7 +43,6 @@ class UserFamily(db.Model):
     family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=False)
 
 
-
 # ペットモデル
 class Pet(db.Model):
     __tablename__ = 'pet'
@@ -55,8 +53,7 @@ class Pet(db.Model):
     birthdate = db.Column(db.Date)
     image = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=True)  # family_id カラムを追加
-
+    family_id = db.Column(db.Integer, db.ForeignKey('family.id'), nullable=True)
 
 
 # 招待モデル
@@ -71,12 +68,13 @@ class Invitation(db.Model):
     family = db.relationship('Family', backref='invitations', lazy=True)
 
 
-# ペットレコード
+# ペットレコードモデル
 class PetRecord(db.Model):
     __tablename__ = 'pet_record'
     id = db.Column(db.Integer, primary_key=True)
     pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    food_type = db.Column(db.String(50), nullable=True)  # ごはんの種類カラムを追加
     food_amount = db.Column(db.String(50), nullable=True)
     food_memo = db.Column(db.Text, nullable=True)
     poop_amount = db.Column(db.String(50), nullable=True)
@@ -92,9 +90,9 @@ class PetRecord(db.Model):
     user = db.relationship('User', backref='records', lazy=True)
 
 
+# ケアタスクモデル
 class CareTask(db.Model):
     __tablename__ = 'caretask_table'
-
     caretask_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
@@ -103,19 +101,24 @@ class CareTask(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __init__(self, user_id, date, task_name, status='pending'):
-        self.user_id = user_id
-        self.date = date
-        self.task_name = task_name
-        self.status = status  # `status` 引数を追加
 
-
+# チャットメッセージモデル
+#class ChatMessage(db.Model):
+#    __tablename__ = 'chat_message'
+#    id = db.Column(db.Integer, primary_key=True)
+#    pet_id = db.Column(db.Integer, db.ForeignKey('pet.id'), nullable=False)
+#    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#    message = db.Column(db.Text, nullable=False)
+#    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+#    pet = db.relationship('Pet', backref='messages', lazy=True)
+#    sender = db.relationship('User', backref='sent_messages', lazy=True)
 
 
 # テーブルを作成するための関数
 def create_tables():
     with app.app_context():
         db.create_all()  # テーブルを作成
+
 
 # メインブロック
 if __name__ == "__main__":

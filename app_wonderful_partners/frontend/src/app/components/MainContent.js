@@ -88,11 +88,11 @@ const MainContent = ({ petId, petName }) => {
 
           <div className={styles.messageBoxContainer}>
             <div className={styles.messageBox}>
-              <div style={{ marginBottom: '5px' }}>{username}さんへ</div>  {/* 最も記録が少ないユーザー名を表示 */}
+              <div style={{ marginBottom: '5px' }}>{username}へ</div>  {/* 最も記録が少ないユーザー名を表示 */}
               <div>{invitationMessage}</div>  {/* ここに散歩のお誘いメッセージが表示される */}
               <div style={{ textAlign: 'right', marginTop: '5px' }}>{petName}より</div>  {/* ペットの名前を表示 */}
             </div>
-            <Link href="/chat">
+            <Link href={`/${petId}/top/chat`} passHref>
               <img
                 src="/mail-button.png"
                 alt="返信"
