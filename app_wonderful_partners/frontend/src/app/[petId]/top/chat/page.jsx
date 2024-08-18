@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import styles from './ChatPage.module.css';  // スタイルシートをインポート
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../../../components/Header';  // 正しいパスに修正
+import Footer from '../../../components/Footer';
 
 
 

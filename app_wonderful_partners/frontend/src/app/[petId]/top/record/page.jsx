@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '../../../components/Header';
+import Header from '../../../components/Header';  // 正しいパスに修正
 import Footer from '../../../components/Footer';
 
 

@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import Header from '../../components/Header';  // 正しいパスに修正
-import Footer from '../../components/Footer';
+import Header from '../../../components/Header';  // 正しいパスに修正
+import Footer from '../../../components/Footer';
 import { ja } from 'date-fns/locale';
 
 
