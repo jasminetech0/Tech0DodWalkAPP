@@ -1,10 +1,10 @@
 "use client";
 import React from 'react';
-import Link from 'next/link';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '@/app/components/Header';
+import Footer from '@/app/components/Footer';
 
-const HomePage = () => {
+
+const ShopPage = () => {
   return (
     <div>
       <Header />
@@ -20,4 +20,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ShopPage;

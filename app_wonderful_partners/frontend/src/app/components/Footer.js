@@ -15,25 +15,33 @@ const Footer = () => {
 
   return (
     <footer>
-  <div className={styles['footer-buttons']}>
-    <Link href="/top" passHref>
-      <button className={styles['footer-button']}>
-        <img
-          src="/home-button.png"
-          alt="ホーム"
-          className={styles['footer-icon']}
-        />
-      </button>
-    </Link>
-    <Link href={`/${petId}/top/record`} passHref>
-      <button className={styles['footer-button']}>日々の<br />記録</button>
-    </Link>
-    <button className={styles['footer-button']}>記録<br />確認</button>
-    <Link href="/top/schedule" passHref>
-      <button className={styles['footer-button']}>お世話の<br />予約</button>
-    </Link>
-  </div>
-</footer>
+      <div className={styles['footer-buttons']}>
+        <Link href="/top" passHref>
+          <button className={styles['footer-button']}>
+            <img
+              src="/home-button.png"
+              alt="ホーム"
+              className={styles['footer-icon']}
+            />
+          </button>
+        </Link>
+
+        <Link href={`/${petId}/top/record`} passHref>
+          <button className={styles['footer-button']}>日々の<br />記録</button>
+        </Link>
+
+        <button className={styles['footer-button']}>記録<br />確認</button>
+
+        <Link href="/top/schedule" passHref>
+          <button className={styles['footer-button']}>お世話の<br />予約</button>
+        </Link>  {/* ここでしっかり閉じる */}
+
+        <Link href={`/top/${petId}/shop`} passHref>
+          <button className={styles['footer-button']}>わん<br />モール</button> 
+        </Link>
+
+      </div>
+    </footer>
   );
 };
 
