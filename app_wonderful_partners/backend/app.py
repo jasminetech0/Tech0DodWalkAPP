@@ -369,31 +369,22 @@ def invite_least_active_member_for_walk(pet_id):
 
 @app.route('/api/chats', methods=['POST'])
 def chat():
-    data = request.get_json()  # クライアントからのJSONデータを取得
-    message_content = data.get('message')  # メッセージの文字列を取得
-
-    if not isinstance(message_content, str):
-        return jsonify({'error': 'Message content must be a string'}), 400  # エラーハンドリング
-
+    message = request.get_json()  # クライアントからのJSONデータを取得
     # ChatGPT APIにメッセージを送信して応答を取得
-    response = openai.ChatCompletion.create( 
+    response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-0125",  # 安価なモデルを指定
         messages=[
-            {"role": "system", "content": "あなたは犬のマシューです。散歩のお誘いを行いました。"},
-            {"role": "user", "content": message_content}  # 文字列として送信
+            {"role": "system", "content": "あなたは犬のマシューです。散歩に誘いました。"},
+            {"role": "user", "content": message}
         ],
         max_tokens=50
     )
-
     reply = response['choices'][0]['message']['content'].strip()
-
     # 返答の文字数を制限（例: 100文字）
     max_length = 100
     if len(reply) > max_length:
         reply = reply[:max_length] + "..."  # 切り詰めて末尾に "..." を追加
-
     return jsonify({'reply': reply})
-
 
 
 @app.route('/')
