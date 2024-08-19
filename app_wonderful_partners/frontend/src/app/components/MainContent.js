@@ -88,11 +88,11 @@ const MainContent = ({ petId, petName }) => {
 
           <div className={styles.messageBoxContainer}>
             <div className={styles.messageBox}>
-              <div style={{ marginBottom: '5px' }}>{username}へ</div>  {/* 最も記録が少ないユーザー名を表示 */}
+              <div style={{ marginBottom: '5px' }}>{username}さんへ</div>  {/* 最も記録が少ないユーザー名を表示 */}
               <div>{invitationMessage}</div>  {/* ここに散歩のお誘いメッセージが表示される */}
               <div style={{ textAlign: 'right', marginTop: '5px' }}>{petName}より</div>  {/* ペットの名前を表示 */}
             </div>
-            <Link href={`/${petId}/top/chat`} passHref>
+            <Link href="/chat">
               <img
                 src="/mail-button.png"
                 alt="返信"
@@ -111,7 +111,7 @@ const MainContent = ({ petId, petName }) => {
       {/* 追加: 散歩とごはんの情報を2列で表示 */}
       <div className={styles.dailyActivities}>
         <div className={`${styles.activityBox} ${styles.walk}`}>
-          <div className={styles.activityTitle}>散歩</div>
+          <div className={styles.activityTitle}>🐾散歩</div>
           <div className={styles.activityDetails}>
             05:00 - 05:30 （パパ）<br />
             18:00 - 18:30 （パパ・けんちゃん）
@@ -119,7 +119,7 @@ const MainContent = ({ petId, petName }) => {
         </div>
 
         <div className={`${styles.activityBox} ${styles.meal}`}>
-          <div className={styles.activityTitle}>ごはん</div>
+          <div className={styles.activityTitle}>🍚ごはん</div>
           <div className={styles.activityDetails}>
             06:00 （ママ）<br />
             18:00 （ママ）

@@ -37,8 +37,8 @@
 }
 
 .profilePic {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
   image-rendering: crisp-edges; /* 画像のシャープさを保つ */
@@ -58,20 +58,20 @@
   border-radius: 10px;
   padding: 10px;
   background-color: white;
-  max-width: 300px; /* 最大幅を300pxに設定 */
+  max-width: 350px; /* 最大幅を350pxに設定 */
   min-width: 250px; /* 最小幅を250pxに設定 */
   word-wrap: break-word;
   position: relative;
   flex-grow: 1; /* メッセージボックスが横幅を広げるための調整 */
-  font: 600 0.75rem/1rem Roboto Flex; /* Figmaより */
+  font: 1000 0.85rem/1rem Roboto Flex; /* Figmaより */
   margin-top: 20px; /* 上に20pxの余白を追加 */
   margin-right: 10px; /* 右に余白を追加して返信ボタンとスペースを確保 */
 }
 
 /* 返信ボタン */
 .replyIcon {
-  width: 25px; /* 画像の幅を小さく設定 */
-  height: 25px; /* 画像の高さを小さく設定 */
+  width: 40px; /* 画像の幅を小さく設定 */
+  height: 40px; /* 画像の高さを小さく設定 */
   object-fit: cover; /* 画像を枠内に収める */
   cursor: pointer; /* マウスオーバー時にポインターを表示 */
   margin-left: auto; /* 自動で左側に余白を確保 */
@@ -95,7 +95,7 @@
   font-weight: bold;
   margin: 20px auto 1px auto; /* 上に20px,下に1pxの余白を設定し、中央に配置 */
   text-align: center;
-  width: 350px; /* タイトルの幅を設定 */
+  width: 375px; /* タイトルの幅を設定 */
   background-color: #8a8b8b; /* 背景色を淡いグレーに設定 */
   padding: 1px; /* 内側の余白を設定 */
   border-radius: 5px; /* 角を丸める */
@@ -133,13 +133,19 @@
 }
 
 .activityDetails {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
   word-wrap: normal; /* テキストが長すぎる場合に折り返しを無効に設定 */
   font-family: 'Courier New', Courier, monospace; /* 等幅フォントを設定 */
+  font-weight:bold ;
 }
 
 /* ウェブセーフフォントを指定 */
 .activityDetails {
   font-family: 'Verdana', Geneva, sans-serif; /* フォントをVerdanaに変更 */
+}
+
+.activityTitle {
+  font-size:1rem;
+  font-weight:bold ;
 }
